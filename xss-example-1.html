@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOM XSS Example 代案1 insertAdjacentHTML</title>
+</head>
+<body>
+  <p></p>
+  <script>
+    const escapeHtml = function (str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;' ).replace( />/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    let xss = `"><svg onload=alert(1)>`;
+    xss = escapeHtml(xss);
+
+    const decodeHtml = function (html) {
+      var txt = document.createElement("textarea");
+      txt.innerHTML = xss;
+
+      return txt.value;
+    }
+    
+    document.querySelector('p').insertAdjacentHTML('beforeend', decodeHtml(xss));
+  </script>
+</body>
+</html>
