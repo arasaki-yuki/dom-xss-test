@@ -19,7 +19,7 @@
 
     const decodeHtml = function (html) {
       var txt = document.createElement("textarea");
-      txt.innerHTML = xss;
+      txt.innerHTML = html;
 
       return txt.value;
     }

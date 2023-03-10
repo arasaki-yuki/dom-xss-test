@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DOM XSS Example 代案4 Sanitizer API</title>
+  <title>DOM XSS Example</title>
 </head>
 <body>
   <p></p>
@@ -13,8 +13,16 @@
       return str.replace(/&/g, '&amp;').replace(/</g, '&lt;' ).replace( />/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
-    let xss = `"><svg onload=alert(1)>`;
+    // let xss = `"><svg onload=alert(1)>`;
+    let xss = `<h1>hoge</h1> \x3Cscript> alert("abcde"); \x3C/script>`;
     xss = escapeHtml(xss);
+
+    // const decodeHtml = function (html) {
+    //   var txt = document.createElement("textarea");
+    //   txt.textContent = html;
+
+    //   return txt.textContent;
+    // }
 
     const decodeHtml = function (html) {
       var txt = document.createElement("textarea");
@@ -22,9 +30,8 @@
 
       return txt.value;
     }
-
-    const sanitizer = new Sanitizer();
-    document.querySelector('p').setHTML(decodeHtml(xss), sanitizer);
+    
+    document.querySelector('p').innerHTML = decodeHtml(xss);
   </script>
 </body>
 </html>
